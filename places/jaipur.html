@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places - Jaipur</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-card h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-card p {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-details {
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item strong {
+            color: #4b5563;
+        }
+
+        .maps-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .maps-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 2px;
+            background-color: #4b5563;
+        }
+
+        .close-button::before {
+            transform: rotate(45deg);
+        }
+
+        .close-button::after {
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .places-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="close-button" onclick="goBack()"></div>
+        <div class="header-card">
+            <h1>Jaipur</h1>
+            <p id="city-description"></p>
+        </div>
+        <div class="places-grid" id="places-container"></div>
+    </div>
+
+    <script>
+        const touristData = {
+            'jaipur': {
+                'desc': 'Famous places: Hawa Mahal, Amber Fort, City Palace, Jantar Mantar.',
+                'places': [
+                    {
+                        'name': 'Hawa Mahal',
+                        'img': 'https://imgs.search.brave.com/5wuaNRYmZjKZniwgXwtNu1zwnsIFuHDvZvLw7jh5vBM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTA3/MzU2OTM1OC9waG90/by9wYWxhY2Utb2Yt/d2luZC1qYWlwdXIt/cmFqYXN0aGFuLWlu/ZGlhLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz1uaC0ydGhY/eU1ZSHZYcE9QTUZR/ZjdxVGwxb3lzMnlo/cWV0c1ZFMWk5LWxn/PQ',
+                        'desc': 'Palace of Winds with a unique honeycomb facade with 953 small windows.',
+                        'maps': 'https://www.google.com/maps?q=Hawa+Mahal',
+                        'peakHours': '9 AM - 12 PM',
+                        'avgTraffic': '25-35 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Amber Fort',
+                        'img': 'https://imgs.search.brave.com/hm2zATJYa5RL73TEa3a2oKXU5O3e3F_DAv0phV0_N-s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTU0/ODk0OTU4L3Bob3Rv/L2FtYmVyLWZvcnQt/amFpcHVyLWluZGlh/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1nQ05pcnczMGNt/a2w3Y2xWMzBsOG1j/Ym14T2stSUFvVDVB/Q3hIUkJRc2RBPQ',
+                        'desc': 'UNESCO World Heritage Site featuring grand palaces, temples, and spectacular views.',
+                        'maps': 'https://www.google.com/maps?q=Amber+Fort',
+                        'peakHours': '10 AM - 2 PM',
+                        'avgTraffic': '40-50 mins',
+                        'exploreTime': '2-3 hours'
+                    },
+                    {
+                        'name': 'City Palace',
+                        'img': 'https://imgs.search.brave.com/k561Mff8QcnBwCeXnXtZNcC8GxzHeE8zAr0Xsik8UZk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTU1/MTUyODYzL3Bob3Rv/L2NpdHktcGFsYWNl/LWluLXVkYWlwdXIt/aW5kaWEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPWhObFNj/MEk2bWgxMEVQNjdI/RVJwRlBpWGFOY0FM/V0FEUTlSdEhLMUJI/aE09',
+                        'desc': 'A complex of courtyards, gardens, and buildings blending Rajasthani and Mughal architecture.',
+                        'maps': 'https://www.google.com/maps?q=City+Palace+Jaipur',
+                        'peakHours': '11 AM - 3 PM',
+                        'avgTraffic': '30-40 mins',
+                        'exploreTime': '2-3 hours'
+                    },
+                    {
+                        'name': 'Jantar Mantar',
+                        'img': 'https://imgs.search.brave.com/6AGzFaK1f7PzWxkKo7Z8O-6fInNE0giccmEHu96HcW4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjIx/MjE4MTI2L3Bob3Rv/L3N1bnNldC1hdC1q/YW50YXItbWFudGFy/LW1vbnVtZW50LWph/aXB1ci1yYWphc3Ro/YW4taW5kaWEuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPU40/OG1FWFN1YUV0MTdT/LWhHVUtOaGY5dnR5/aGZnMjAtMnRGQ01p/SllsOFE9',
+                        'desc': 'UNESCO World Heritage Site featuring the world\'s largest stone sundial.',
+                        'maps': 'https://www.google.com/maps?q=Jantar+Mantar+Jaipur',
+                        'peakHours': '9 AM - 12 PM',
+                        'avgTraffic': '20-30 mins',
+                        'exploreTime': '1-2 hours'
+                    }
+                ]
+            }
+        };
+
+        function createPlaceCard(place) {
+            return `
+                <div class="place-card">
+                    <img src="${place.img}" alt="${place.name}">
+                    <div class="place-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.desc}</p>
+                        <div class="place-details">
+                            <div class="detail-item">
+                                <strong>Peak Hours:</strong> ${place.peakHours}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Avg Traffic Time:</strong> ${place.avgTraffic}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Time to Explore:</strong> ${place.exploreTime}
+                            </div>
+                        </div>
+                        <a href="${place.maps}" target="_blank" class="maps-button">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            const cityData = touristData.jaipur;
+            document.getElementById('city-description').textContent = cityData.desc;
+            
+            const placesContainer = document.getElementById('places-container');
+            cityData.places.forEach(place => {
+                placesContainer.innerHTML += createPlaceCard(place);
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

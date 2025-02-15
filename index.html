@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Quote Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&display=swap" rel="stylesheet">
+    <style>
+        /* Previous styles remain the same */
+        /* ... (all previous styles) ... */
+        /* Previous styles remain the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 20;
+        }
+
+        .nav-button {
+            padding: 0.5rem 1rem;
+            background-color: rgb(79, 70, 229);
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.05);
+            background-color: rgb(67, 56, 202);
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #home {
+            background-color: rgb(243, 244, 246);
+            position: relative;
+        }
+
+        #about {
+            background-color: rgb(238, 242, 255);
+        }
+
+        #how-to-use {
+            background-color: rgb(243, 244, 246);
+        }
+
+        #contact {
+            background-color: rgb(238, 242, 255);
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-align: center;
+            color: rgb(79, 70, 229);
+            max-width: 48rem;
+            font-family: 'Playfair Display', serif;
+            z-index: 10;
+        }
+
+        .section-content {
+            max-width: 48rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .places-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .places-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .place-marker {
+            width: 5rem;
+            height: 5rem;
+            background-color: rgb(59, 130, 246);
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            pointer-events: auto;
+            z-index: 5;
+        }
+
+        .place-marker:hover {
+            transform: translate(-50%, -50%) scale(2);
+        }
+
+        #goa { top: 10%; left: 50%; }
+        #jaipur { top: 50%; left: 15%; }
+        #kerala { top: 85%; left: 50%; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .place-marker {
+                width: 4rem;
+                height: 4rem;
+            }
+            .nav-buttons {
+                flex-direction: column;
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+        .travel-button {
+            display: inline-block;
+            background: none;
+            border: none;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+            color: rgb(79, 70, 229);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0 5px;
+        }
+
+        .travel-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: rgb(79, 70, 229);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+        }
+
+        .travel-button:hover {
+            color: rgb(67, 56, 202);
+        }
+
+        .travel-button:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* All previous styles remain unchanged */
+        
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <button class="nav-button" onclick="scrollToSection('about')">About</button>
+        <button class="nav-button" onclick="scrollToSection('how-to-use')">How to Use</button>
+        <button class="nav-button" onclick="scrollToSection('contact')">Contact</button>
+    </div>
+
+    <section id="home">
+        <h1>The world is a book and those who do not <button class="travel-button" onclick="handleTravelClick()">travel</button> read only one page.</h1>
+        <div class="places-container" id="places-container">
+            <div class="place-marker" id="goa">Manali</div>
+            <div class="place-marker" id="jaipur">Gujarat</div>
+            <div class="place-marker" id="kerala">Kerala</div>
+        </div>
+    </section>
+
+    <!-- Rest of the sections remain the same -->
+    <section id="about">
+        <h2 style="color: rgb(79, 70, 229); font-size: 2.5rem; margin-bottom: 2rem;">About</h2>
+        <div class="section-content">
+            <p>Discover the beauty of India's most enchanting destinations. From the beaches of Goa to the palaces of Jaipur and the backwaters of Kerala, each location offers unique experiences that will leave you speechless.</p>
+        </div>
+    </section>
+
+    <section id="how-to-use">
+        <h2 style="color: rgb(79, 70, 229); font-size: 2.5rem; margin-bottom: 2rem;">How to Use</h2>
+        <div class="section-content">
+            <p>Hover over the blue circles to explore each destination. Each marker represents a unique location with its own charm and character. Click the navigation buttons to learn more about our services and destinations.</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 style="color: rgb(79, 70, 229); font-size: 2.5rem; margin-bottom: 2rem;">Contact</h2>
+        <div class="section-content">
+            <p>Ready to start your journey? Reach out to us:</p>
+            <p style="margin-top: 1rem;">Email: explore@travelindia.com</p>
+            <p>Phone: +91 123 456 7890</p>
+        </div>
+    </section>
+
+    <script>
+        // Previous scroll event listener remains the same
+        window.addEventListener('scroll', function() {
+            const placesContainer = document.getElementById('places-container');
+            const homeSection = document.getElementById('home');
+            const homeSectionBottom = homeSection.offsetTop + homeSection.offsetHeight;
+            
+            if (window.scrollY > 50) {
+                placesContainer.classList.add('hidden');
+            } else {
+                placesContainer.classList.remove('hidden');
+            }
+        });
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView();
+            const placesContainer = document.getElementById('places-container');
+            placesContainer.classList.add('hidden');
+        }
+
+        // New function to handle travel button click
+        function handleTravelClick() {
+            window.location.href = "second.html"; // Assuming the second page is named popular-places.html
+        }
+    </script>
+</body>
+</html>

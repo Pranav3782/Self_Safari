@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places - Goa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-card h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-card p {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-details {
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item strong {
+            color: #4b5563;
+        }
+
+        .maps-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .maps-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 2px;
+            background-color: #4b5563;
+        }
+
+        .close-button::before {
+            transform: rotate(45deg);
+        }
+
+        .close-button::after {
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .places-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="close-button" onclick="goBack()"></div>
+        <div class="header-card">
+            <h1>Goa</h1>
+            <p id="city-description"></p>
+        </div>
+        <div class="places-grid" id="places-container"></div>
+    </div>
+
+    <script>
+        const touristData = {
+            'goa': {
+                'desc': 'Famous places: Calangute Beach, Basilica of Bom Jesus, Fort Aguada, Dudhsagar Falls.',
+                'places': [
+                    {
+                        'name': 'Calangute Beach',
+                        'img': 'https://imgs.search.brave.com/q6hgPm8nBZmVNjbLFDSTctc0o5xW1CGqfbR3ih8YiU0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy84/LzgxL1N1bnNldF9h/dF9DYWxhbmd1dGUu/anBn',
+                        'desc': 'Known as the "Queen of Beaches", famous for its pristine shores.',
+                        'maps': 'https://www.google.com/maps?q=Calangute+Beach',
+                        'peakHours': '4 PM - 7 PM',
+                        'avgTraffic': '25-35 mins',
+                        'exploreTime': '2-3 hours'
+                    },
+                    {
+                        'name': 'Basilica of Bom Jesus',
+                        'img': 'https://imgs.search.brave.com/hPuKQjHvp9U1JxJpeaMlxgWwDKGy7eTnK3_IldxBIIk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4x/LnRyaXBvdG8uY29t/L21lZGlhL2ZpbHRl/ci9ubC9pbWcvMjM4/MDI5MS9JbWFnZS8x/NzA2NTM1MTk0X3No/dXR0ZXJzdG9ja18x/MDczNDgxMDYyXzIw/MTkwODIyMTQ1ODU3/LmpwZy53ZWJw',
+                        'desc': 'UNESCO World Heritage Site holding the mortal remains of St. Francis Xavier.',
+                        'maps': 'https://www.google.com/maps?q=Basilica+of+Bom+Jesus',
+                        'peakHours': '9 AM - 12 PM',
+                        'avgTraffic': '20-30 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Fort Aguada',
+                        'img': 'https://imgs.search.brave.com/m8fpMShw2QJFYA2cqP55Debe4ldghR_yDYZDaR4pS7s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTU3/Njk0OTg1L3Bob3Rv/L3ZpZXctZnJvbS1h/Z3VhZGEtZm9ydC5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/Q1pJY0Y3aGhjVWVm/UkpQTTBRYXVIM05i/V1h1aHBuY1lVcVRR/Y0g0LXNzZz0',
+                        'desc': 'A 17th-century Portuguese fort overlooking the Arabian Sea.',
+                        'maps': 'https://www.google.com/maps?q=Fort+Aguada',
+                        'peakHours': '10 AM - 2 PM',
+                        'avgTraffic': '30-40 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Dudhsagar Falls',
+                        'img': 'https://imgs.search.brave.com/E4b-cQwlp-_AmnP_FlOFCGOL1Oe4CfX50gzgwxxjkbY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTU0/ODE4NTc0L3Bob3Rv/L2R1ZGhzYWdhci5q/cGc_cz02MTJ4NjEy/Jnc9MCZrPTIwJmM9/cGt4Wi1pM1BEUVB6/MV9mQU04clVIdTd6/blc4WG9UblljcVRo/ZGxUc25Caz0',
+                        'desc': 'A four-tiered waterfall among the highest in India, located in Mollem National Park.',
+                        'maps': 'https://www.google.com/maps?q=Dudhsagar+Falls',
+                        'peakHours': '11 AM - 3 PM',
+                        'avgTraffic': '1-1.5 hours',
+                        'exploreTime': '3-4 hours'
+                    }
+                ]
+            }
+        };
+
+        function createPlaceCard(place) {
+            return `
+                <div class="place-card">
+                    <img src="${place.img}" alt="${place.name}">
+                    <div class="place-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.desc}</p>
+                        <div class="place-details">
+                            <div class="detail-item">
+                                <strong>Peak Hours:</strong> ${place.peakHours}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Avg Traffic Time:</strong> ${place.avgTraffic}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Time to Explore:</strong> ${place.exploreTime}
+                            </div>
+                        </div>
+                        <a href="${place.maps}" target="_blank" class="maps-button">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            const cityData = touristData.goa;
+            document.getElementById('city-description').textContent = cityData.desc;
+            
+            const placesContainer = document.getElementById('places-container');
+            cityData.places.forEach(place => {
+                placesContainer.innerHTML += createPlaceCard(place);
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

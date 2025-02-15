@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places - Kolkata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-card h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-card p {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-details {
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item strong {
+            color: #4b5563;
+        }
+
+        .maps-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .maps-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 2px;
+            background-color: #4b5563;
+        }
+
+        .close-button::before {
+            transform: rotate(45deg);
+        }
+
+        .close-button::after {
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .places-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="close-button" onclick="goBack()"></div>
+        <div class="header-card">
+            <h1>Kolkata</h1>
+            <p id="city-description"></p>
+        </div>
+        <div class="places-grid" id="places-container"></div>
+    </div>
+
+    <script>
+        const touristData = {
+            'kolkata': {
+                'desc': 'Famous places: Victoria Memorial, Howrah Bridge, Dakshineswar Kali Temple, Park Street.',
+                'places': [
+                    {
+                        'name': 'Victoria Memorial',
+                        'img': 'https://imgs.search.brave.com/EOen0Rh5e4ad3xijKZ0JnYexPTXU89TKaFN1nk_ZWo0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTQy/NzM3NzUzL3Bob3Rv/L3ZpY3RvcmlhLW1l/bW9yaWFsLWtvbGth/dGEtaW5kaWEuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPVlv/djFQXzBDUDQ3NUFm/SmpaaGh3MGhtcjRY/Tnp2clh5bTRfTzJk/N3lRSmc9',
+                        'desc': 'Magnificent marble museum dedicated to Queen Victoria, surrounded by gardens.',
+                        'maps': 'https://www.google.com/maps?q=Victoria+Memorial+Kolkata',
+                        'peakHours': '11 AM - 4 PM',
+                        'avgTraffic': '35-45 mins',
+                        'exploreTime': '2-3 hours'
+                    },
+                    {
+                        'name': 'Howrah Bridge',
+                        'img': 'https://imgs.search.brave.com/qjctVz3_ehAd8qipzwW6XdEGYC7LZ2GDViLJ7Pvr_e4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2E2L2E4/L2MzL2E2YThjM2Mw/ZmJmMDBiMzgwNjMx/YzcxNTRjZjU5ZGE1/LmpwZw',
+                        'desc': 'Iconic cantilever bridge over the Hooghly River, a symbol of Kolkata.',
+                        'maps': 'https://www.google.com/maps?q=Howrah+Bridge',
+                        'peakHours': '7 AM - 10 AM, 5 PM - 8 PM',
+                        'avgTraffic': '30-40 mins',
+                        'exploreTime': '30 mins - 1 hour'
+                    },
+                    {
+                        'name': 'Dakshineswar Kali Temple',
+                        'img': 'https://imgs.search.brave.com/6U7r0hM-jcVaHyyZT9YcswTI4XJU_qnJRI11i-KyuSU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTcw/OTY1MjM1L3Bob3Rv/L2Rha3NoaW5lc2h3/YXIta2FsaS10ZW1w/bGUtYW5kLWhvb2do/bHktcml2ZXItbmVh/ci1rb2xrYXRhLXdl/c3QtYmVuZ2FsLWlu/ZGlhLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz16TVo5aHR1/RW1Xczc5WWNIdjEw/MVpGaGlDcUxvQlFO/eWp0LVgtcGJSMUNr/PQ',
+                        'desc': 'Hindu temple dedicated to Goddess Kali, associated with Ramakrishna Paramahamsa.',
+                        'maps': 'https://www.google.com/maps?q=Dakshineswar+Kali+Temple',
+                        'peakHours': '6 AM - 10 AM, 4 PM - 7 PM',
+                        'avgTraffic': '40-50 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Park Street',
+                        'img': 'https://imgs.search.brave.com/hWeowm2hfrPUQOp7szs4_J8nzAQz3s9rRs5w4RUxioo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzdlL2Rj/LzdhLzdlZGM3YTU4/NzA2ZWRkOTBiYmU3/MDJmOTNjMTczNDVm/LmpwZw',
+                        'desc': 'Popular street known for restaurants, nightlife, and colonial-era architecture.',
+                        'maps': 'https://www.google.com/maps?q=Park+Street+Kolkata',
+                        'peakHours': '7 PM - 11 PM',
+                        'avgTraffic': '25-35 mins',
+                        'exploreTime': '2-3 hours'
+                    }
+                ]
+            }
+        };
+
+        function createPlaceCard(place) {
+            return `
+                <div class="place-card">
+                    <img src="${place.img}" alt="${place.name}">
+                    <div class="place-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.desc}</p>
+                        <div class="place-details">
+                            <div class="detail-item">
+                                <strong>Peak Hours:</strong> ${place.peakHours}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Avg Traffic Time:</strong> ${place.avgTraffic}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Time to Explore:</strong> ${place.exploreTime}
+                            </div>
+                        </div>
+                        <a href="${place.maps}" target="_blank" class="maps-button">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            const cityData = touristData.kolkata;
+            document.getElementById('city-description').textContent = cityData.desc;
+            
+            const placesContainer = document.getElementById('places-container');
+            cityData.places.forEach(place => {
+                placesContainer.innerHTML += createPlaceCard(place);
+            });
+        }
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

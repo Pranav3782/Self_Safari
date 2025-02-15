@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places - chennai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-card h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-card p {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-details {
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item strong {
+            color: #4b5563;
+        }
+
+        .maps-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .maps-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 2px;
+            background-color: #4b5563;
+        }
+
+        .close-button::before {
+            transform: rotate(45deg);
+        }
+
+        .close-button::after {
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .places-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="close-button" onclick="goBack()"></div>
+        <div class="header-card">
+            <h1>Chennai</h1>
+            <p id="city-description"></p>
+        </div>
+        <div class="places-grid" id="places-container"></div>
+    </div>
+
+    <script>
+        const touristData = {
+            'chennai': {
+                'desc': 'Famous places: Marina Beach, Kapaleeshwarar Temple, Fort St. George, San Thome Basilica.',
+                'places': [
+                    {
+                        'name': 'Marina Beach',
+                        'img': 'https://imgs.search.brave.com/SYdgYp3SoojhL18WxcPd0ceoLjQEcNHNm2xsNXquims/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAzLzI5Lzc1Lzk2/LzM2MF9GXzMyOTc1/OTY2M18wNFJrU3Ey/R3VLWTBxNEVnTm40/Um9Qd3d3RG5teUZ0/cC5qcGc',
+                        'desc': 'The second-longest urban beach in the world, spanning 13 km.',
+                        'maps': 'https://www.google.com/maps?q=Marina+Beach',
+                        'peakHours': '5 PM - 9 PM',
+                        'avgTraffic': '25-35 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Kapaleeshwarar Temple',
+                        'img': 'https://imgs.search.brave.com/ijP0Fh4e16VWYx8ZHp98-OttzHaOwiVNcRbf95jhnJQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzExLzExLzEwLzEy/LzM2MF9GXzExMTEx/MDEyNjRfMnFjMUY3/Mnl5MWIyQ2xZSXNG/VFFOT09US3JwZWZ0/eFcuanBn',
+                        'desc': 'Ancient Dravidian-style Shiva temple with colorful gopurams and wooden carvings.',
+                        'maps': 'https://www.google.com/maps?q=Kapaleeshwarar+Temple',
+                        'peakHours': '6 AM - 9 AM, 5 PM - 8 PM',
+                        'avgTraffic': '20-30 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Fort St. George',
+                        'img': 'https://imgs.search.brave.com/X3C7pEHpp_823g34NDCacFzbwwjRZJrSKh5u8Nghk_c/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvY2hl/bm5haS1mb3J0LXN0/LWdlb3JnZS1ubmZr/amQxdDVkNXR3ODdi/LmpwZw',
+                        'desc': 'The first English fortress in India, housing St. Mary\'s Church and museum.',
+                        'maps': 'https://www.google.com/maps?q=Fort+St.+George',
+                        'peakHours': '11 AM - 3 PM',
+                        'avgTraffic': '30-40 mins',
+                        'exploreTime': '2-3 hours'
+                    },
+                    {
+                        'name': 'San Thome Basilica',
+                        'img': 'https://imgs.search.brave.com/IhSHV3MxebtIxyfStKvi0U6sVZ5xEhehCbVe11Ksa6k/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jYXRo/b2xpY3NocmluZWJh/c2lsaWNhLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvU2FudGhv/bWUtQ2F0aGVkcmFs/LUJhc2lsaWNhLUNo/ZW5uYWktMTAyNHg1/NzYud2VicA',
+                        'desc': 'Neo-Gothic style church built over the tomb of St. Thomas the Apostle.',
+                        'maps': 'https://www.google.com/maps?q=San+Thome+Basilica',
+                        'peakHours': '10 AM - 12 PM, 4 PM - 6 PM',
+                        'avgTraffic': '20-30 mins',
+                        'exploreTime': '1 hour'
+                    }
+                ]
+            }
+        };
+
+        function createPlaceCard(place) {
+            return `
+                <div class="place-card">
+                    <img src="${place.img}" alt="${place.name}">
+                    <div class="place-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.desc}</p>
+                        <div class="place-details">
+                            <div class="detail-item">
+                                <strong>Peak Hours:</strong> ${place.peakHours}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Avg Traffic Time:</strong> ${place.avgTraffic}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Time to Explore:</strong> ${place.exploreTime}
+                            </div>
+                        </div>
+                        <a href="${place.maps}" target="_blank" class="maps-button">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            const cityData = touristData.chennai;
+            document.getElementById('city-description').textContent = cityData.desc;
+            
+            const placesContainer = document.getElementById('places-container');
+            cityData.places.forEach(place => {
+                placesContainer.innerHTML += createPlaceCard(place);
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

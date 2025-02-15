@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places - bangalore</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-card h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-card p {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-details {
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item strong {
+            color: #4b5563;
+        }
+
+        .maps-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .maps-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 2px;
+            background-color: #4b5563;
+        }
+
+        .close-button::before {
+            transform: rotate(45deg);
+        }
+
+        .close-button::after {
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .places-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="close-button" onclick="goBack()"></div>
+        <div class="header-card">
+            <h1>Bangalore</h1>
+            <p id="city-description"></p>
+        </div>
+        <div class="places-grid" id="places-container"></div>
+    </div>
+    
+
+    <script>
+        const touristData = {
+            'bangalore': {
+                'desc': 'Famous places: Lalbagh Botanical Garden, Bangalore Palace, Cubbon Park, Wonderla.',
+                'places': [
+                    {
+                        'name': 'Lalbagh Botanical Garden',
+                        'img': 'https://imgs.search.brave.com/zjgD_qOUX2l434lVXVz0vM8tKGz68vopP6lguY_8KUY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YTEudGhyaWxsb3Bo/aWxpYS5jb20vZmls/ZXN0b3JlL3JobHIx/M3MzYnZ2Mm9nNmZl/cjM0bXhuaG1vMGJf/c2h1dHRlcnN0b2Nr/XzU1NzgxMDU2OSUy/MCgxKS5qcGc',
+                        'desc': 'A lush botanical garden with a glasshouse inspired by London\'s Crystal Palace.',
+                        'maps': 'https://www.google.com/maps?q=Lalbagh+Botanical+Garden',
+                        'peakHours': '10 AM - 2 PM',
+                        'avgTraffic': '20-30 mins',
+                        'exploreTime': '2-3 hours'
+                    },
+                    {
+                        'name': 'Bangalore Palace',
+                        'img': 'https://imgs.search.brave.com/F236QBsqppyd28j1Yw5n8IROVb8e92082sZ2hqax7zE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzY0LzU1LzA1/LzM2MF9GXzI2NDU1/MDU1Nl8xTVRJMUg5/b2NyU1JIdkJmYWFW/RE1JNUFLZDRpd2M3/by5qcGc',
+                        'desc': 'A palace featuring Tudor-style architecture with woodcarvings and paintings.',
+                        'maps': 'https://www.google.com/maps?q=Bangalore+Palace',
+                        'peakHours': '11 AM - 3 PM',
+                        'avgTraffic': '30-40 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Cubbon Park',
+                        'img': 'https://imgs.search.brave.com/XIxIc4LstqtgnKXPzsR5qA4UWT7mzOmlIBQq5O9xOIg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2FkLzU3/L2IwL2FkNTdiMGVl/ZDViNGE3NzY5M2Y3/YWRkMzRlNzVkYTE2/LmpwZw',
+                        'desc': 'A landmark 300-acre park with monuments, statues, and over 6,000 plants.',
+                        'maps': 'https://www.google.com/maps?q=Cubbon+Park',
+                        'peakHours': '6 AM - 9 AM, 5 PM - 7 PM',
+                        'avgTraffic': '15-20 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Wonderla',
+                        'img': 'https://imgs.search.brave.com/h4F3YuspaYdBWCKrrc3Si5YK5t3v4mn0ZKxEnLsBPhQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2YwLzc5/L2MyL2YwNzljMjkz/M2Q0MDlmOThiOGNl/ZjJiYjkwMDRhNmFi/LmpwZw',
+                        'desc': 'An amusement park with water rides, dry rides, and musical fountain shows.',
+                        'maps': 'https://www.google.com/maps?q=Wonderla+Bangalore',
+                        'peakHours': '12 PM - 4 PM',
+                        'avgTraffic': '45-60 mins',
+                        'exploreTime': '5-6 hours'
+                    }
+                ]
+            }
+        };
+
+        function createPlaceCard(place) {
+            return `
+                <div class="place-card">
+                    <img src="${place.img}" alt="${place.name}">
+                    <div class="place-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.desc}</p>
+                        <div class="place-details">
+                            <div class="detail-item">
+                                <strong>Peak Hours:</strong> ${place.peakHours}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Avg Traffic Time:</strong> ${place.avgTraffic}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Time to Explore:</strong> ${place.exploreTime}
+                            </div>
+                        </div>
+                        <a href="${place.maps}" target="_blank" class="maps-button">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            const cityData = touristData.bangalore;
+            document.getElementById('city-description').textContent = cityData.desc;
+            
+            const placesContainer = document.getElementById('places-container');
+            cityData.places.forEach(place => {
+                placesContainer.innerHTML += createPlaceCard(place);
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        
+    </script>
+</body>
+</html>

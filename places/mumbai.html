@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Places - Mumbai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-card h1 {
+            text-align: center;
+            color: #1f2937;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-card p {
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .place-details {
+            margin: 1rem 0;
+        }
+
+        .detail-item {
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item strong {
+            color: #4b5563;
+        }
+
+        .maps-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .maps-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .close-button::before,
+        .close-button::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 2px;
+            background-color: #4b5563;
+        }
+
+        .close-button::before {
+            transform: rotate(45deg);
+        }
+
+        .close-button::after {
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .places-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="close-button" onclick="goBack()"></div>
+        <div class="header-card">
+            <h1>Mumbai</h1>
+            <p id="city-description"></p>
+        </div>
+        <div class="places-grid" id="places-container"></div>
+    </div>
+
+    <script>
+        const touristData = {
+            'mumbai': {
+                'desc': 'Famous places: Gateway of India, Marine Drive, Elephanta Caves, Haji Ali Dargah.',
+                'places': [
+                    {
+                        'name': 'Gateway of India',
+                        'img': 'https://imgs.search.brave.com/o1UWhU9EVN8tBXGCb3PlfffHpGkW7FNM8ReKLdrVgb8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTUw/MTMxOTU0L3Bob3Rv/L2dhdGV3YXktb2Yt/aW5kaWEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPW1taUNa/TkJ4Y1lwXzhuVWJQ/QW5FUEN3b3dTOXhB/U0hIM3ZVdHBWdktL/UkU9',
+                        'desc': 'Iconic monument built during the British Raj, overlooking the Arabian Sea.',
+                        'maps': 'https://www.google.com/maps?q=Gateway+of+India',
+                        'peakHours': '4 PM - 8 PM',
+                        'avgTraffic': '35-45 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Marine Drive',
+                        'img': 'https://imgs.search.brave.com/cS72AeFtQv1vHeA5zw5kDuOh3VeWvCTNwcCPhnvQf3M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNDU2/ODgzNjcxL3Bob3Rv/L3ZpZXctb2YtbWFy/aW5lLWRyaXZlLWJl/YWNoZXMtYXQtZXZl/bmluZy5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9clN3OXdk/c0NSaVZuMDVVSVVa/cldUNXJTVU5zcGJL/YW80djdLMF9xc3Nx/QT0',
+                        'desc': 'A 3.6-km long boulevard along the coastline, also known as the Queen\'s Necklace.',
+                        'maps': 'https://www.google.com/maps?q=Marine+Drive+Mumbai',
+                        'peakHours': '6 PM - 10 PM',
+                        'avgTraffic': '30-40 mins',
+                        'exploreTime': '1-2 hours'
+                    },
+                    {
+                        'name': 'Elephanta Caves',
+                        'img': 'https://imgs.search.brave.com/zSAZLQUikzysIKub05-Ac6wdtx46xY54dUXxZdIbzb8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvOTQ1/MDI1OTg0L3Bob3Rv/L3RoZS1lbGVwaGFu/dGEtY2F2ZXMtb2Yt/bXVtYmFpLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz0tUXpD/OWNWVHZEaFZ1OXZ4/S01FUG85T29MZEk4/Njk1SUM0MTJEemYw/V09FPQ',
+                        'desc': 'UNESCO World Heritage Site with ancient cave temples dedicated to Lord Shiva.',
+                        'maps': 'https://www.google.com/maps?q=Elephanta+Caves',
+                        'peakHours': '11 AM - 3 PM',
+                        'avgTraffic': '1-1.5 hours',
+                        'exploreTime': '3-4 hours'
+                    },
+                    {
+                        'name': 'Haji Ali Dargah',
+                        'img': 'https://imgs.search.brave.com/kbRmXmhqDg3kW42ZadEAPxtR28oKJSyXveVq6onCot4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pZHNi/LnRtZ3J1cC5jb20u/dHIvbHkvdXBsb2Fk/cy9pbWFnZXMvMjAy/MS8xMC8wNi8xNTAy/NDguanBn',
+                        'desc': 'Floating mosque and tomb located on an islet in the Arabian Sea.',
+                        'maps': 'https://www.google.com/maps?q=Haji+Ali+Dargah',
+                        'peakHours': '10 AM - 2 PM',
+                        'avgTraffic': '25-35 mins',
+                        'exploreTime': '1-2 hours'
+                    }
+                ]
+            }
+        };
+
+        function createPlaceCard(place) {
+            return `
+                <div class="place-card">
+                    <img src="${place.img}" alt="${place.name}">
+                    <div class="place-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.desc}</p>
+                        <div class="place-details">
+                            <div class="detail-item">
+                                <strong>Peak Hours:</strong> ${place.peakHours}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Avg Traffic Time:</strong> ${place.avgTraffic}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Time to Explore:</strong> ${place.exploreTime}
+                            </div>
+                        </div>
+                        <a href="${place.maps}" target="_blank" class="maps-button">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializePage() {
+            const cityData = touristData.mumbai;
+            document.getElementById('city-description').textContent = cityData.desc;
+            
+            const placesContainer = document.getElementById('places-container');
+            cityData.places.forEach(place => {
+                placesContainer.innerHTML += createPlaceCard(place);
+            });
+        }
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
